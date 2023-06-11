@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: Common Schemas
+  description: Common Schemas
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    ErrorWrapper:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorEntry'
+        source:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    ErrorEntry:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        message:
+          type: string
+

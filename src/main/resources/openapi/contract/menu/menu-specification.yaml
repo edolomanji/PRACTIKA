@@ -1,0 +1,88 @@
+openapi: 3.0.3
+info:
+  title: API Menu - specification
+  description: Represents the contract for Menu Domain
+  version: 1.0.0
+tags:
+  - Menus
+paths:
+  /menus:
+    get:
+      summary: Get all menu items
+      operationId: getMenuItems
+      tags:
+        - Menus
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../menu/menu-schema.yaml#/components/schemas/Menu'
+
+    post:
+      summary: Create new menu record
+      operationId: createMenuItem
+      tags:
+        - Menus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../menu/menu-schema.yaml#/components/schemas/Menu'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '../menu/menu-schema.yaml#/components/schemas/Menu'
+        400:
+          description: User invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '../common/common-schema.yaml#/components/schemas/ErrorWrapper'
+  /menus/{identifier}:
+    get:
+      summary: Get specific menu item by identifier
+      operationId: get specific menu item
+      tags:
+        - Menus
+      parameters:
+        - $ref: '../menu/menu-schema.yaml#/components/parameters/identifier'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '../menu/menu-schema.yaml#/components/schemas/Menu'
+        400:
+          description: User invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '../common/common-schema.yaml#/components/schemas/ErrorWrapper'
+    delete:
+      summary: Delete specific menu item by identifier
+      operationId: delete
+      tags:
+        - Menus
+      parameters:
+        - $ref: '../menu/menu-schema.yaml#/components/parameters/identifier'
+      responses:
+        204:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        400:
+          description: User invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '../common/common-schema.yaml#/components/schemas/ErrorWrapper'

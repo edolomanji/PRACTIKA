@@ -1,0 +1,49 @@
+openapi: 3.0.3
+info:
+  title: API Menu - Schemas
+  description: The block of schemas, necessary for menu specification
+  version: 1.0.0
+paths: { }
+components:
+  schemas:
+    Menu:
+      type: object
+      description: Represents the specific object of menu item
+      properties:
+        identifier:
+          type: string
+          format: UUID
+        name:
+          type: string
+          pattern: '^(?!\s)[a-zA-Z0-9\s]{3,48}$'
+        description:
+          type: string
+          pattern: '^(?!\s)[a-zA-Z0-9,.!)(\s]{0,256}$'
+        price:
+          type: number
+          minimum: 0
+          exclusiveMinimum: true
+        categories:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+      required:
+        - name
+        - description
+        - price
+
+  parameters:
+    identifier:
+      in: path
+      required: true
+      name: identifier
+      description: ID of the menu to get specific item, update item, delete item
+      schema:
+        type: string
+        format: UUID
+
+
+
+
+

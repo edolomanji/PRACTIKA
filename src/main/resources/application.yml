@@ -1,0 +1,13 @@
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.HSQLDialect
+  h2:
+
+  datasource:
+    url: jdbc:hsqldb:mem:testdb;DB_CLOSE_DELAY=-1
+    username: SA
+    password:
+    driverClassName: org.hsqldb.jdbc.JDBCDriver

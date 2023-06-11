@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: API Category - Schemas
+  description: The block of schemas, necessary
+    for category specification
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        name:
+          type: string
+          pattern: '^(?!\s)[a-zA-Z0-9\s]{3,48}$'
+        description:
+          type: string
+          pattern: '^(?!\s)[a-zA-Z0-9,.!)(\s]{0,256}$'
+      required:
+        - name
+  parameters:
+    name:
+      in: path
+      required: true
+      name: name
+      description: ID of the category to get specific item,
+        update item, delete item
+      schema:
+        type: string

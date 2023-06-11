@@ -1,0 +1,88 @@
+openapi: 3.0.3
+info:
+  title: API Category - specification
+  description: Represents the contract for Category Domain
+  version: 1.0.0
+tags:
+  - Categories
+paths:
+  /categories:
+    get:
+      summary: Get all category items
+      operationId: getCategories
+      tags:
+        - Categories
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../category/category-schema.yaml#/components/schemas/Category'
+
+    post:
+      summary: Create new category record
+      operationId: createCategory
+      tags:
+        - Categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../category/category-schema.yaml#/components/schemas/Category'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '../category/category-schema.yaml#/components/schemas/Category'
+        400:
+          description: User invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '../common/common-schema.yaml#/components/schemas/ErrorWrapper'
+  /categories/{name}:
+    get:
+      summary: Get specific menu item by identifier
+      operationId: getCategory
+      tags:
+        - Categories
+      parameters:
+        - $ref: '../category/category-schema.yaml#/components/parameters/name'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '../category/category-schema.yaml#/components/schemas/Category'
+        400:
+          description: User invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '../common/common-schema.yaml#/components/schemas/ErrorWrapper'
+    delete:
+      summary: Delete specific menu item by identifier
+      tags:
+        - Categories
+      operationId: deleteCategory
+      parameters:
+        - $ref: '../category/category-schema.yaml#/components/parameters/name'
+      responses:
+        204:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        400:
+          description: User invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '../common/common-schema.yaml#/components/schemas/ErrorWrapper'

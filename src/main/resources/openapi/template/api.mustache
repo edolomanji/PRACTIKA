@@ -1,0 +1,105 @@
+package {{package}};
+
+{{#imports}}import {{import}};
+{{/imports}}
+{{^useResponseEntity}}
+import org.springframework.http.HttpStatus;
+{{/useResponseEntity}}
+{{#useResponseEntity}}
+import org.springframework.http.ResponseEntity;
+{{/useResponseEntity}}
+{{#useBeanValidation}}
+import org.springframework.validation.annotation.Validated;
+{{/useBeanValidation}}
+{{#useSpringController}}
+{{#useResponseEntity}}
+import org.springframework.stereotype.Controller;
+{{/useResponseEntity}}
+{{^useResponseEntity}}
+import org.springframework.web.bind.annotation.RestController;
+{{/useResponseEntity}}
+{{/useSpringController}}
+import org.springframework.web.bind.annotation.*;
+
+{{#useBeanValidation}}
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+{{/useBeanValidation}}
+import java.util.List;
+import java.util.Map;
+{{#jdk8-no-delegate}}
+import java.util.Optional;
+{{/jdk8-no-delegate}}
+{{^jdk8-no-delegate}}
+{{#useOptional}}
+import java.util.Optional;
+{{/useOptional}}
+{{/jdk8-no-delegate}}
+
+{{#useBeanValidation}}
+@Validated
+{{/useBeanValidation}}
+{{#useSpringController}}
+{{#useResponseEntity}}
+@Controller
+{{/useResponseEntity}}
+{{^useResponseEntity}}
+@RestController
+{{/useResponseEntity}}
+{{/useSpringController}}
+{{#operations}}
+public interface {{classname}} {
+{{#jdk8-default-interface}}
+    {{^isDelegate}}
+        {{^reactive}}
+
+    default Optional<NativeWebRequest> getRequest() {
+        return Optional.empty();
+    }
+        {{/reactive}}
+    {{/isDelegate}}
+    {{#isDelegate}}
+
+    default {{classname}}Delegate getDelegate() {
+        return new {{classname}}Delegate() {};
+    }
+    {{/isDelegate}}
+{{/jdk8-default-interface}}
+{{#operation}}
+
+    @RequestMapping(
+        method = RequestMethod.{{httpMethod}},
+        value = "{{{path}}}"{{#singleContentTypes}}{{#hasProduces}},
+        produces = "{{{vendorExtensions.x-accepts}}}"{{/hasProduces}}{{#hasConsumes}},
+        consumes = "{{{vendorExtensions.x-content-type}}}"{{/hasConsumes}}{{/singleContentTypes}}{{^singleContentTypes}}{{#hasProduces}},
+        produces = { {{#produces}}"{{{mediaType}}}"{{^-last}}, {{/-last}}{{/produces}} }{{/hasProduces}}{{#hasConsumes}},
+        consumes = { {{#consumes}}"{{{mediaType}}}"{{^-last}}, {{/-last}}{{/consumes}} }{{/hasConsumes}}{{/singleContentTypes}}{{#hasVersionHeaders}},
+        headers = { {{#vendorExtensions.versionHeaderParamsList}}"{{baseName}}{{#defaultValue}}={{{.}}}{{/defaultValue}}"{{^-last}}, {{/-last}}{{/vendorExtensions.versionHeaderParamsList}} } {{/hasVersionHeaders}}{{#hasVersionQueryParams}},
+        params = { {{#vendorExtensions.versionQueryParamsList}}"{{baseName}}{{#defaultValue}}={{{.}}}{{/defaultValue}}"{{^-last}}, {{/-last}}{{/vendorExtensions.versionQueryParamsList}} } {{/hasVersionQueryParams}}
+    )
+    {{^useResponseEntity}}
+    {{/useResponseEntity}}
+    {{#jdk8-default-interface}}default {{/jdk8-default-interface}}{{#responseWrapper}}{{.}}<{{/responseWrapper}}{{#useResponseEntity}}ResponseEntity<{{/useResponseEntity}}{{>returnTypes}}{{#useResponseEntity}}>{{/useResponseEntity}}{{#responseWrapper}}>{{/responseWrapper}} {{#delegate-method}}_{{/delegate-method}}{{operationId}}(
+        {{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{>cookieParams}}{{^-last}},
+        {{/-last}}{{/allParams}}{{#reactive}}{{#hasParams}},
+        {{/hasParams}}{{#swagger2AnnotationLibrary}}@Parameter(hidden = true){{/swagger2AnnotationLibrary}}{{#springFoxDocumentationProvider}}@ApiIgnore{{/springFoxDocumentationProvider}} final ServerWebExchange exchange{{/reactive}}{{#vendorExtensions.x-spring-paginated}}{{#hasParams}},
+        {{/hasParams}}{{^hasParams}}{{#reactive}},{{/reactive}}{{/hasParams}}{{#springFoxDocumentationProvider}}@ApiIgnore {{/springFoxDocumentationProvider}}{{#springDocDocumentationProvider}}@ParameterObject {{/springDocDocumentationProvider}}final Pageable pageable{{/vendorExtensions.x-spring-paginated}}
+    ){{#unhandledException}} throws Exception{{/unhandledException}}{{^jdk8-default-interface}};{{/jdk8-default-interface}}{{#jdk8-default-interface}} {
+        {{#delegate-method}}
+        {{^isVoid}}return {{/isVoid}}{{#isVoid}}{{#useResponseEntity}}return {{/useResponseEntity}}{{^useResponseEntity}}{{#reactive}}return {{/reactive}}{{/useResponseEntity}}{{/isVoid}}{{operationId}}({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}}{{#reactive}}{{#hasParams}}, {{/hasParams}}exchange{{/reactive}}{{#vendorExtensions.x-spring-paginated}}{{#hasParams}}, {{/hasParams}}{{^hasParams}}{{#reactive}}, {{/reactive}}{{/hasParams}}pageable{{/vendorExtensions.x-spring-paginated}});
+    }
+
+    // Override this method
+    {{#jdk8-default-interface}}default {{/jdk8-default-interface}} {{#responseWrapper}}{{.}}<{{/responseWrapper}}{{#useResponseEntity}}ResponseEntity<{{/useResponseEntity}}{{>returnTypes}}{{#useResponseEntity}}>{{/useResponseEntity}}{{#responseWrapper}}>{{/responseWrapper}} {{operationId}}({{#allParams}}{{^isFile}}{{^isBodyParam}}{{>optionalDataType}}{{/isBodyParam}}{{#isBodyParam}}{{^reactive}}{{{dataType}}}{{/reactive}}{{#reactive}}{{^isArray}}Mono<{{{dataType}}}>{{/isArray}}{{#isArray}}Flux<{{{baseType}}}>{{/isArray}}{{/reactive}}{{/isBodyParam}}{{/isFile}}{{#isFile}}{{#reactive}}Flux<Part>{{/reactive}}{{^reactive}}MultipartFile{{/reactive}}{{/isFile}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}}{{#reactive}}{{#hasParams}}, {{/hasParams}}{{#springFoxDocumentationProvider}}@ApiIgnore{{/springFoxDocumentationProvider}} final ServerWebExchange exchange{{/reactive}}{{#vendorExtensions.x-spring-paginated}}{{#hasParams}}, {{/hasParams}}{{^hasParams}}{{#reactive}}, {{/reactive}}{{/hasParams}}{{#springFoxDocumentationProvider}}@ApiIgnore{{/springFoxDocumentationProvider}}final Pageable pageable{{/vendorExtensions.x-spring-paginated}}){{#unhandledException}} throws Exception{{/unhandledException}} {
+        {{/delegate-method}}
+        {{^isDelegate}}
+        {{>methodBody}}
+        {{/isDelegate}}
+        {{#isDelegate}}
+        {{^isVoid}}return {{/isVoid}}{{#isVoid}}{{#useResponseEntity}}return {{/useResponseEntity}}{{^useResponseEntity}}{{#reactive}}return {{/reactive}}{{/useResponseEntity}}{{/isVoid}}getDelegate().{{operationId}}({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}}{{#reactive}}{{#hasParams}}, {{/hasParams}}exchange{{/reactive}}{{#vendorExtensions.x-spring-paginated}}{{#hasParams}}, {{/hasParams}}{{^hasParams}}{{#reactive}}, {{/reactive}}{{/hasParams}}pageable{{/vendorExtensions.x-spring-paginated}});
+        {{/isDelegate}}
+    }{{/jdk8-default-interface}}
+
+{{/operation}}
+}
+{{/operations}}

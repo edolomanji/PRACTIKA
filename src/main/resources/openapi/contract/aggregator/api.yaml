@@ -1,0 +1,16 @@
+openapi: 3.0.3
+info:
+  title: API common - aggregator
+  description: The workaround for avoid multiexecution generation
+  version: 1.0.0
+paths:
+  /categories:
+    $ref: '../category/category-specification.yaml#/paths/~1categories'
+  /categories/{name}:
+    $ref: '../category/category-specification.yaml#/paths/~1categories~1%7Bname%7D'
+  /menus:
+    $ref: '../menu/menu-specification.yaml#/paths/~1menus'
+  /menus/{identifier}:
+    $ref: '../menu/menu-specification.yaml#/paths/~1menus~1%7Bidentifier%7D'
+
+  

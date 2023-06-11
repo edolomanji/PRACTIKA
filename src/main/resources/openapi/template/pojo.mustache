@@ -1,0 +1,64 @@
+import lombok.Data;
+
+{{#discriminator}}
+{{>typeInfoAnnotation}}
+{{/discriminator}}
+{{#jackson}}
+{{#isClassnameSanitized}}
+{{^hasDiscriminatorWithNonEmptyMapping}}  
+@JsonTypeName("{{name}}")
+{{/hasDiscriminatorWithNonEmptyMapping}}
+{{/isClassnameSanitized}}
+{{/jackson}}
+{{#vendorExtensions.x-class-extra-annotation}}
+{{{vendorExtensions.x-class-extra-annotation}}}
+{{/vendorExtensions.x-class-extra-annotation}}
+@Data
+public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}}{{^parent}}{{#hateoas}} extends RepresentationModel<{{classname}}> {{/hateoas}}{{/parent}}{{#vendorExtensions.x-implements}}{{#-first}} implements {{{.}}}{{/-first}}{{^-first}}, {{{.}}}{{/-first}}{{/vendorExtensions.x-implements}} {
+{{#serializableModel}}
+
+  private static final long serialVersionUID = 1L;
+{{/serializableModel}}
+  {{#vars}}
+
+    {{#isEnum}}
+    {{^isContainer}}
+{{>enumClass}}
+    {{/isContainer}}
+    {{#isContainer}}
+    {{#mostInnerItems}}
+{{>enumClass}}
+    {{/mostInnerItems}}
+    {{/isContainer}}
+    {{/isEnum}}
+  {{#jackson}}
+  {{/jackson}}
+  {{#vendorExtensions.x-field-extra-annotation}}
+  {{{vendorExtensions.x-field-extra-annotation}}}
+  {{/vendorExtensions.x-field-extra-annotation}}
+  {{#isContainer}}
+  {{>beanValidation}}
+  {{#openApiNullable}}
+  private {{>nullableDataType}} {{name}}{{#isNullable}} = JsonNullable.undefined(){{/isNullable}}{{^isNullable}}{{#defaultValue}} = {{{.}}}{{/defaultValue}}{{/isNullable}};
+  {{/openApiNullable}}
+  {{^openApiNullable}}
+  private {{>nullableDataType}} {{name}}{{#defaultValue}} = {{{.}}}{{/defaultValue}};
+  {{/openApiNullable}}
+  {{/isContainer}}
+  {{^isContainer}}
+  {{#isDate}}
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  {{/isDate}}
+  {{#isDateTime}}
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  {{/isDateTime}}
+  {{>beanValidation}}
+  {{#openApiNullable}}
+  private {{>nullableDataType}} {{name}}{{#isNullable}} = JsonNullable.undefined(){{/isNullable}}{{^isNullable}}{{#defaultValue}} = {{{.}}}{{/defaultValue}}{{/isNullable}};
+  {{/openApiNullable}}
+  {{^openApiNullable}}
+  private {{>nullableDataType}} {{name}}{{#isNullable}} = null{{/isNullable}}{{^isNullable}}{{#defaultValue}} = {{{.}}}{{/defaultValue}}{{/isNullable}};
+  {{/openApiNullable}}
+  {{/isContainer}}
+  {{/vars}}
+}
